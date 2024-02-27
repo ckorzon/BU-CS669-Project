@@ -489,86 +489,162 @@ VALUES
 	(SELECT mood_id FROM mood_option WHERE mood_name='Motivated'), (SELECT mood_id FROM mood_option WHERE mood_name='Optimistic'),
 	(SELECT mood_id FROM mood_option WHERE mood_name='Bored'));
 
--- INSERT activities for each journal entry to use for visualizations
-BEGIN TRANSACTION
+-- INSERT activities and metrics for each journal entry to use for visualizations
+BEGIN TRANSACTION;
 DO $$
 DECLARE
     jrnl_id_var DECIMAL(24);
+    metric_id_var DECIMAL(12);
 BEGIN
+    -- Get productivity metric id
+    metric_id_var := (SELECT metric_opt_id FROM metric_option WHERE metric_name='Productivity Rating');
+
     -- 1st day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-01');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-01');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'),
         (SELECT activity_opt_id FROM activity_option WHERE activity_name='Spend Time with Friends'), jrnl_id_var, 8),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Watch TV'), jrnl_id_var, 1);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 1);
 
     -- 2nd day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-02');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-02');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Work'), jrnl_id_var, 8),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Watch TV'), jrnl_id_var, 3);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 3);
 
     -- 3rd day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-03');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-03');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Work'), jrnl_id_var, 8),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Gym'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Read Novel'), jrnl_id_var, 2);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 9);
 
     -- 4th day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-04');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-04');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Work'), jrnl_id_var, 8),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Gym'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Read Novel'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Walk Outside'), jrnl_id_var, 1);
-    -- External Factors
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 7);
 
     -- 5th day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-05');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-05');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Work'), jrnl_id_var, 8),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Nap'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Watch TV'), jrnl_id_var, 3);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 4);
 
     -- 6th day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-06');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-06');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Relax at Home'), jrnl_id_var, 5),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Nap'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Read Novel'), jrnl_id_var, 1),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Watch TV'), jrnl_id_var, 4);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 2);
 
     -- 7th day journal
-    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=1 AND recording_date='2024-02-07');
+    jrnl_id_var := (SELECT recording_id FROM daily_recording WHERE app_user_id=3 AND recording_date='2024-02-07');
     -- Activities
     INSERT INTO recorded_activity (rec_activity_id, activity_opt_id, recording_id, duration)
     VALUES (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Gym'), jrnl_id_var, 2),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Homework'), jrnl_id_var, 5),
     (nextval('rec_activity_sequence'), (SELECT activity_opt_id FROM activity_option WHERE activity_name='Read Novel'), jrnl_id_var, 2);
-    -- External Factors / Metrics
-    -- TODO!
+    -- Custom Metrics
+    CALL ADD_SCAL_METRIC_RECORDING(jrnl_id_var, metric_id_var, 10);
 
 END;
 $$;
 COMMIT TRANSACTION;
 
 --QUERIES
---Replace this with your queries (including any queries used for data visualizations).
+
+-- Question 1 Query
+SELECT mood_i_opt.mood_name AS mood_i_name, mood_ii_opt.mood_name AS mood_ii_name, activity_name
+FROM app_user
+JOIN daily_recording ON app_user.app_user_id=daily_recording.app_user_id
+JOIN mood_option AS mood_i_opt ON daily_recording.mood_i=mood_i_opt.mood_id
+JOIN mood_option AS mood_ii_opt ON daily_recording.mood_ii=mood_ii_opt.mood_id
+JOIN recorded_activity ON daily_recording.recording_id=recorded_activity.recording_id
+JOIN activity_option ON recorded_activity.activity_opt_id=activity_option.activity_opt_id
+WHERE app_user.app_user_id=(SELECT app_user_id FROM app_user WHERE email='hannahvw@coolmail.com')
+AND recording_date = CAST('2024-02-19' AS DATE);
+
+-- Question 2 Query
+SELECT category_value.metric_value, COUNT(categorical_metric.rec_metric_id)
+FROM (SELECT app_user_id FROM app_user WHERE email='hannahvw@coolmail.com') AS user_info
+JOIN daily_recording ON daily_recording.app_user_id=user_info.app_user_id
+JOIN recorded_metric ON daily_recording.recording_id=recorded_metric.recording_id
+JOIN (SELECT metric_opt_id FROM metric_option WHERE metric_name='Sleep Level') AS metric_opt
+ON recorded_metric.metric_opt_id=metric_opt.metric_opt_id
+JOIN categorical_metric ON recorded_metric.rec_metric_id=categorical_metric.rec_metric_id
+RIGHT JOIN category_value ON category_value.value_id=categorical_metric.value_id
+GROUP BY category_value.metric_value;
+
+-- Question 3 Query
+CREATE OR REPLACE VIEW user_enabled_metrics AS 
+SELECT * FROM (
+	SELECT app_user.app_user_id, metric_option.metric_opt_id, metric_name,
+	CASE 
+		WHEN metric_type=1 THEN 'CATEGORICAL'
+		WHEN metric_type=2 THEN 'BOOLEAN'
+		WHEN metric_type=3 THEN 'SCALAR'
+		ELSE 'UNDEFINED'
+	END AS metric_type
+	FROM metric_option
+	JOIN enabled_metric ON metric_option.metric_opt_id=enabled_metric.metric_opt_id
+	JOIN app_user ON enabled_metric.app_user_id=app_user.app_user_id
+);
+
+SELECT metric_name, metric_type, COUNT(rec_metric_id) AS times_submitted
+FROM user_enabled_metrics
+JOIN (SELECT app_user_id FROM app_user WHERE email='hannahvw@coolmail.com') AS user_info
+ON user_enabled_metrics.app_user_id=user_info.app_user_id
+JOIN (SELECT recording_id, app_user_id FROM daily_recording) AS recording_info
+ON recording_info.app_user_id=user_info.app_user_id
+JOIN recorded_metric ON recorded_metric.recording_id=recording_info.recording_id
+AND recorded_metric.metric_opt_id=user_enabled_metrics.metric_opt_id
+GROUP BY metric_name, metric_type;
+
+-- Data Visualization Query 1
+-- Capture relationship between activities and moods
+SELECT activity_name, COUNT(CASE WHEN is_positive THEN activity_option.activity_opt_id END) AS positve_day_count,
+COUNT(CASE WHEN is_positive=false THEN activity_option.activity_opt_id END) AS negative_day_count,
+COUNT(activity_option.activity_opt_id) AS total_count
+FROM daily_recording
+JOIN recorded_activity ON daily_recording.recording_id=recorded_activity.recording_id
+JOIN mood_option ON daily_recording.mood_i=mood_option.mood_id
+JOIN activity_option ON recorded_activity.activity_opt_id=activity_option.activity_opt_id
+WHERE daily_recording.app_user_id=3
+GROUP BY activity_option.activity_opt_id
+ORDER BY total_count;
+
+-- Data Visualization Query 2
+-- Capture relationship between activities and productivity rating
+SELECT activity_name, SUM(duration) AS sum_duration, SUM(metric_value) AS sum_productivity,
+ROUND((SUM(metric_value) / SUM(duration)),2) AS productivity_rating
+FROM daily_recording
+JOIN recorded_activity ON daily_recording.recording_id=recorded_activity.recording_id
+JOIN activity_option ON recorded_activity.activity_opt_id=activity_option.activity_opt_id
+JOIN recorded_metric ON daily_recording.recording_id=recorded_metric.recording_id
+JOIN scalar_metric ON recorded_metric.rec_metric_id=scalar_metric.rec_metric_id
+WHERE daily_recording.app_user_id=3 AND metric_opt_id=1
+GROUP BY activity_option.activity_opt_id
+ORDER BY productivity_rating;
